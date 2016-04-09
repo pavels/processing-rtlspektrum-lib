@@ -1,4 +1,4 @@
-package rtlpower;
+package rtlspektrum;
 import org.bridj.BridJ;
 import org.bridj.Pointer;
 import org.bridj.StructObject;

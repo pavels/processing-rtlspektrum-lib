@@ -20,22 +20,6 @@
       <artifactId>bridj</artifactId>
       <version>0.7.0</version>
     </dependency>
-        
-    <dependency>
-      <groupId>rtlsdr</groupId>
-      <artifactId>rtlsdr</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/../rtlsdr/target/rtlsdr-1.0-SNAPSHOT.jar</systemPath>
-    </dependency>    
-
-    <dependency>
-      <groupId>rtlpower</groupId>
-      <artifactId>rtlpower</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/../rtlpower/target/rtlpower-1.0-SNAPSHOT.jar</systemPath>
-    </dependency>    
   </dependencies>
 
   <build>

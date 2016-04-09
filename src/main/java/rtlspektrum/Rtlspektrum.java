@@ -17,8 +17,6 @@
 
 package rtlspektrum;
 
-import rtlsdr.*;
-import rtlpower.*;
 import org.bridj.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -95,14 +93,18 @@ public class Rtlspektrum
 		ms.linear(0);
 	}	
 
-	public void openDevice(){
+	public int openDevice(){
+		int ret = 0;
 		Pointer<Pointer> ppdev = Pointer.pointerToPointer(dev);
-		RtlsdrLibrary.rtlsdr_open(ppdev, 0);
-		dev = ppdev.get();
+		ret = RtlsdrLibrary.rtlsdr_open(ppdev, 0);
 
-		initMisc();
+		if(ret >= 0) {
+			dev = ppdev.get();
+			initMisc();
+			RtlsdrLibrary.rtlsdr_reset_buffer(dev);
+		}
 
-		RtlsdrLibrary.rtlsdr_reset_buffer(dev);
+		return ret;
 	}
 
 	public void setFrequencyRange(int lower, int upper, int step){

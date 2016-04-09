@@ -1,4 +1,4 @@
-package rtlsdr;
+package rtlspektrum;
 import java.util.Collections;
 import java.util.Iterator;
 import org.bridj.BridJ;
