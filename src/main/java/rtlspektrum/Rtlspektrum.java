@@ -18,6 +18,7 @@
 package rtlspektrum;
 
 import org.bridj.*;
+import java.io.File;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -53,8 +54,28 @@ public class Rtlspektrum
 
 	public static final int AUTO_GAIN = RtlpowerLibrary.AUTO_GAIN;
 
+	private static final String[] nativeLibraries = { "rtlsdr", "rtlpower" };
 
 	public Rtlspektrum(int deviceId){
+		// BridJ library loading stuff
+		File runningPath = null;
+		
+		try{
+			runningPath = (new File(Rtlspektrum.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath())).getParentFile();
+		}catch(java.net.URISyntaxException e){
+			// nothing
+		}
+
+		if(runningPath != null) {
+			System.out.println(String.format("Loading libs from %s.", runningPath));
+			for(String lib: nativeLibraries){
+				File nativePath = BridJ.getNativeLibraryFile(lib);
+				File targetLibPath = new File(runningPath, nativePath.getName());
+				System.out.println(String.format("Library %s file %s.", lib, targetLibPath));
+				BridJ.setNativeLibraryFile(lib, targetLibPath);
+			}
+		}
+
 		this.deviceId = deviceId;
 	}
 
