@@ -237,6 +237,10 @@ public class Rtlspektrum
 		RtlsdrLibrary.rtlsdr_set_direct_sampling(dev,state);
 	}	
 
+	public void setCorrection(int ppm){
+		RtlsdrLibrary.rtlsdr_set_freq_correction(dev,ppm);
+	}
+
 	private void scanOneTune(int index){
 		tuning_state ts = tunes.get(index);
 		int bufferShift = subbufferShifts[index];
