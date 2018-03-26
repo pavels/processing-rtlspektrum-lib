@@ -43,6 +43,8 @@ public class Rtlspektrum
 	private double dbmRelativeBuffer[] = null;
 	private int subbufferShifts[] = null;
 
+	private int scanPos = 0;
+
 	private final Lock dbmBufferLock = new ReentrantLock();
 
 	private misc_settings.window_fn_callback window_callback = null;
@@ -55,6 +57,15 @@ public class Rtlspektrum
 	public static final int AUTO_GAIN = RtlpowerLibrary.AUTO_GAIN;
 
 	private static final String[] nativeLibraries = { "rtlsdr", "rtlpower" };
+
+	public static String[] getDevices() {
+		int deviceCount = RtlsdrLibrary.rtlsdr_get_device_count();
+		String[] ret = new String[deviceCount];
+		for(int i = 0;i<deviceCount;i++){
+			ret[i] = RtlsdrLibrary.rtlsdr_get_device_name(i).getCString();
+		}
+		return ret;
+	}
 
 	public Rtlspektrum(int deviceId){
 		// BridJ library loading stuff
@@ -80,6 +91,16 @@ public class Rtlspektrum
 	}
 
 	public void setRelativeMode(RelativeModeType relMode){
+		if(this.relMode != relMode && relMode == RelativeModeType.RECORD){
+			for(int i = 0;i<dbmBuffer.length;i++){
+				dbmRelativeBuffer[i] = dbmBuffer[i];
+			}
+		}else if(this.relMode != relMode && relMode == RelativeModeType.NONE){
+			dbmRelativeBuffer = new double[dbmRelativeBuffer.length];
+			for(int i = 0;i<dbmBuffer.length;i++){
+				dbmBuffer[i] = Double.POSITIVE_INFINITY;
+			}
+		}
 		this.relMode = relMode;
 	}
 
@@ -196,6 +217,10 @@ public class Rtlspektrum
 		return ret;
 	}
 
+	public int getScanPos() {
+		return scanPos;
+	}
+
 	public void setGain(int gain){
 		boolean restart = autoScanThread.isAlive();
 		stopAutoScan();
@@ -246,6 +271,7 @@ public class Rtlspektrum
 		int bufferShift = subbufferShifts[index];
 
 		RtlpowerLibrary.scan_tune(dev,Pointer.getPointer(ts));
+		scanPos = bufferShift + (ts.crop_i2() - ts.crop_i1());
 
 		dbmBufferLock.lock();
 		try {
