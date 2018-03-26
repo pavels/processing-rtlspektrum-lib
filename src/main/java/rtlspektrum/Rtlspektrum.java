@@ -59,6 +59,8 @@ public class Rtlspektrum
 	private static final String[] nativeLibraries = { "rtlsdr", "rtlpower" };
 
 	public static String[] getDevices() {
+		loadNativeLibs();
+		
 		int deviceCount = RtlsdrLibrary.rtlsdr_get_device_count();
 		String[] ret = new String[deviceCount];
 		for(int i = 0;i<deviceCount;i++){
@@ -67,7 +69,7 @@ public class Rtlspektrum
 		return ret;
 	}
 
-	public Rtlspektrum(int deviceId){
+	public static void loadNativeLibs(){
 		// BridJ library loading stuff
 		File runningPath = null;
 		
@@ -85,8 +87,11 @@ public class Rtlspektrum
 				System.out.println(String.format("Library %s file %s.", lib, targetLibPath));
 				BridJ.setNativeLibraryFile(lib, targetLibPath);
 			}
-		}
+		}		
+	}
 
+	public Rtlspektrum(int deviceId){
+		loadNativeLibs();
 		this.deviceId = deviceId;
 	}
 
