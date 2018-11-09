@@ -143,7 +143,7 @@ public class Rtlspektrum
 	public int openDevice(){
 		int ret = 0;
 		Pointer<Pointer> ppdev = Pointer.pointerToPointer(dev);
-		ret = RtlsdrLibrary.rtlsdr_open(ppdev, 0);
+		ret = RtlsdrLibrary.rtlsdr_open(ppdev, deviceId);
 
 		if(ret >= 0) {
 			dev = ppdev.get();
