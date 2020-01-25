@@ -83,7 +83,12 @@ public class Rtlspektrum
 			System.out.println(String.format("Loading libs from %s.", runningPath));
 			for(String lib: nativeLibraries){
 				File nativePath = BridJ.getNativeLibraryFile(lib);
-				File targetLibPath = new File(runningPath, nativePath.getName());
+				String name = nativePath.getName();
+				if(Platform.isWindows()) {
+					// We are building using mingw64 - we will end up with lib prefix
+					name = "lib" + name;
+				}
+				File targetLibPath = new File(runningPath, name);
 				System.out.println(String.format("Library %s file %s.", lib, targetLibPath));
 				BridJ.setNativeLibraryFile(lib, targetLibPath);
 			}
