@@ -89,7 +89,7 @@ public class Rtlspektrum
 				} else if(Platform.isMacOSX()) {
 					name = "lib" + lib + ".dylib";
 				} else {
-					name = "lib" + name + ".so";
+					name = "lib" + lib + ".so";
 				}
 				File targetLibPath = new File(runningPath, name);
 				System.out.println(String.format("Library %s file %s.", lib, targetLibPath));
