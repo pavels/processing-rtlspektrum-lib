@@ -162,7 +162,8 @@ public class Rtlspektrum
 		return ret;
 	}
 
-	public void setFrequencyRange(int lower, int upper, int step){
+	public void setFrequencyRange(int lower, int upper, int step, double crop_grg){
+		ms.crop(crop_grg);
 		channel_solve c = new channel_solve();
 
 		c.lower(lower);
