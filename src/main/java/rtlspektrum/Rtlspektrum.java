@@ -60,12 +60,16 @@ public class Rtlspektrum
 
 	public static String[] getDevices() {
 		loadNativeLibs();
-		
+
 		int deviceCount = RtlsdrLibrary.rtlsdr_get_device_count();
 		String[] ret = new String[deviceCount];
+		Pointer<Byte> serial = Pointer.allocateBytes(256);
+
 		for(int i = 0;i<deviceCount;i++){
-			ret[i] = RtlsdrLibrary.rtlsdr_get_device_name(i).getCString();
+			RtlsdrLibrary.rtlsdr_get_device_usb_strings(i, null, null, serial);
+			ret[i] = RtlsdrLibrary.rtlsdr_get_device_name(i).getCString() + ": " + serial.getCString();
 		}
+		serial.release();
 		return ret;
 	}
 
